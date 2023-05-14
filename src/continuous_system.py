@@ -1,9 +1,8 @@
 import numpy as np
 from __init__ import MAX_TIME_STEP, BIFU_TIME_STEP
-from visualize_util.visualize_lor import visu_lorenz_map, visu_lorenz_init_sensitivity
+from src.util.visualize_util.visualize_lor import visu_lorenz_map, visu_lorenz_init_sensitivity
 
 def simulate_continuous_system():
-    #attractor transfer(bifurcation)
     # p = [13, 14, 15, 20, 23, 23.5, 23.5, 24.3, 24.4, 24.5, 24.6, 24.7, 24.8, 26, 27, 28]
     p = [i/1000 for i in range(5190, 5210, 1)]
     lorenz_map = np.zeros((len(p),int(MAX_TIME_STEP), 3))

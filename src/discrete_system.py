@@ -1,5 +1,5 @@
 import numpy as np
-from visualize_util.visualize_logi import visu_logi_map, visu_logi_bifu_sensitivity
+from src.util.visualize_util.visualize_logi import visu_logi_map, visu_logi_bifu_sensitivity
 from __init__ import MAX_TIME_STEP, BIFU_TIME_STEP
 
 
