@@ -20,10 +20,20 @@ def visu_logi_map(logi_map : np.ndarray, a:int):
     plt.title(f"logistic_map : a = {a}")
     plt.savefig("image/logi/a_" + str(a)+".jpeg")
 
+
+def visu_logi_iniPos_sensitivity(two_data_logi_map : np.ndarray, initPos1:float, initPos2:float):
+    plt.figure()
+    plt.xlim(0, two_data_logi_map.shape[1])
+    plt.plot(two_data_logi_map[0, :], color='deepskyblue')
+    plt.plot(two_data_logi_map[1, :], color='palegreen')
+    plt.legend(['initPos1={:.10f}'.format(initPos1), 'initPos2={:.10f}'.format(initPos2)], loc="upper left")
+    plt.savefig("image/sensitivity_to_iniPos_logi")
+
+
 def visu_logi_bifu_sensitivity(two_data_logi_map : np.ndarray, a1:float, a2:float):
     plt.figure()
     plt.xlim(0, two_data_logi_map.shape[1])
     plt.plot(two_data_logi_map[0, :], color='deepskyblue')
     plt.plot(two_data_logi_map[1, :], color='palegreen')
     plt.legend(['a1={:.10f}'.format(a1), 'a2={:.10f}'.format(a2)], loc="upper left")
-    plt.savefig("sensitivity to bifurcation params")
+    plt.savefig("image/sensitivity_to_bifu_params_logi")

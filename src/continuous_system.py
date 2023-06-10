@@ -1,12 +1,14 @@
 import numpy as np
-from __init__ import MAX_TIME_STEP, BIFU_TIME_STEP
-from src.util.visualize_util.visualize_lor import visu_lorenz_map, visu_lorenz_init_sensitivity
+from __init__ import MAX_TIME_STEP, BIFU_TIME_STEP, NOISE
+from src.util.visualize_util.visualize_lor import visu_lorenz_map, visu_lorenz_init_sensitivity, visu_lorenz_bifu_sensitivity
 
 def simulate_continuous_system():
-    # p = [13, 14, 15, 20, 23, 23.5, 23.5, 24.3, 24.4, 24.5, 24.6, 24.7, 24.8, 26, 27, 28]
-    p = [i/1000 for i in range(5190, 5210, 1)]
+    
+    #attractor transfer(bifurcation)
+    p = [i/10 for i in range(10, 60, 5)] + [i/1000 for i in range(5190, 5200, 1)]
+    print(type(p))
     lorenz_map = np.zeros((len(p),int(MAX_TIME_STEP), 3))
-    x0 = 0.4
+    x0 = 0.5
     
     for i in range(len(p)):
         lorenz_map[i,0,0] = x0
@@ -19,9 +21,10 @@ def simulate_continuous_system():
     
         visu_lorenz_map(lorenz_map[i], p[i])
     
-    #sesitivity to initial params
+    
+    #sesitivity to initial conditions
     initial_point1 = np.ones((1,1,3))/2
-    initial_point2 = initial_point1 + np.ones((1,1,3))/pow(10, 5)
+    initial_point2 = initial_point1*(1+NOISE)
     
     lorenz_iniPosi_compare = np.zeros((2, int(MAX_TIME_STEP), 3))
     lorenz_iniPosi_compare[0,0, :]=initial_point1
@@ -30,8 +33,20 @@ def simulate_continuous_system():
     for i in range(1, int(MAX_TIME_STEP)):
         lorenz_iniPosi_compare[0, i, :] = F_lorenz_system(lorenz_iniPosi_compare[0, i-1, :], p=6)
         lorenz_iniPosi_compare[1, i, :] = F_lorenz_system(lorenz_iniPosi_compare[1, i-1, :], p=6)
-    
+        
     visu_lorenz_init_sensitivity(lorenz_iniPosi_compare, initial_point1, initial_point2)
+
+    
+    #sesitivity to bifu params
+    lorenz_bifu_compare = np.zeros((2, int(MAX_TIME_STEP), 3))
+    lorenz_bifu_compare[0,0, :]=initial_point1
+    lorenz_bifu_compare[1,0, :]=initial_point1
+    
+    for i in range(1, int(MAX_TIME_STEP)):
+        lorenz_bifu_compare[0, i, :] = F_lorenz_system(lorenz_iniPosi_compare[0, i-1, :], p=6)
+        lorenz_bifu_compare[1, i, :] = F_lorenz_system(lorenz_iniPosi_compare[1, i-1, :], p=6*(1+NOISE))
+    
+    visu_lorenz_bifu_sensitivity(lorenz_bifu_compare, NOISE)
 
 
 def F_lorenz_system(point_pre : np.ndarray, p, dt = 1e-3, r=28, b=8/3)->np.ndarray:
